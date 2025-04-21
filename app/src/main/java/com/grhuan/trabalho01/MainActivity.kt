@@ -1,23 +1,17 @@
 package com.grhuan.trabalho01
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.renderscript.ScriptGroup.Binding
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.grhuan.trabalho01.api.ApiService
 import com.grhuan.trabalho01.databinding.ActivityMainBinding
-import com.grhuan.trabalho01.databinding.ActivityRegister2Binding
 import com.grhuan.trabalho01.dto.LoginRequest
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 
 class MainActivity : AppCompatActivity() {
     var baseUrl = "http://trabalho-two-do.duckdns.org:3333/"
@@ -33,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     //mudando de tela
     binding.register.setOnClickListener {
-        val intent = Intent(this, Register::class.java)
+        val intent = Intent(this, RegisterActivity::class.java)
         startActivity(intent)
     }
 
@@ -54,9 +48,18 @@ class MainActivity : AppCompatActivity() {
                         password = pass
                     )
                     val response = api.loginUser(request)
+
+                    val dashbord = Intent(this@MainActivity, DashbordActivity::class.java)
+                    dashbord.putExtra("name", response.user.name)
+                    startActivity(dashbord)
+
                     Log.d("Login", "Usuário logado: ${response.user.name}")
 
                 } catch (e: Exception) {
+
+
+                    //aqui pode colocar uma mensagem de erro para aparecer na tela
+                    //se der erro e porque errou a senha ou email
                     Log.e("LoginError", "Erro ao fazer login: ${e.message}")
                 }
             }

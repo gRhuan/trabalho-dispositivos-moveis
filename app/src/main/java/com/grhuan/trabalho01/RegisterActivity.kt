@@ -4,19 +4,15 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.grhuan.trabalho01.api.ApiService
-import com.grhuan.trabalho01.databinding.ActivityMainBinding
 import com.grhuan.trabalho01.databinding.ActivityRegister2Binding
-import com.grhuan.trabalho01.dto.LoginRequest
 import com.grhuan.trabalho01.dto.RegisterRequest
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class Register : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         //importante
         var baseUrl = "http://trabalho-two-do.duckdns.org:3333/"
@@ -50,6 +46,9 @@ class Register : AppCompatActivity() {
                     Log.d("Login", "Usuário cadastrado")
 
                 } catch (e: Exception) {
+
+                    //se der erro aqui e porque ele nao colocou mais de 6 digitos na senhe
+                    //ou o email ja esta cadastrado
                     Log.e("LoginError", "Erro ao fazer login: ${e.message}")
                 }
             }
