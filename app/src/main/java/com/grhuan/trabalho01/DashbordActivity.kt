@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.grhuan.trabalho01.databinding.ActivityDashbordBinding
-import com.grhuan.trabalho01.databinding.ActivityRegister2Binding
+import com.grhuan.trabalho01.databinding.ActivityRegisterBinding
 
 class DashbordActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

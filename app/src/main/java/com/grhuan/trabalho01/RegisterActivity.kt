@@ -1,14 +1,18 @@
 package com.grhuan.trabalho01
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.grhuan.trabalho01.MainActivity
 import com.grhuan.trabalho01.api.ApiService
-import com.grhuan.trabalho01.databinding.ActivityRegister2Binding
+import com.grhuan.trabalho01.databinding.ActivityRegisterBinding
 import com.grhuan.trabalho01.dto.RegisterRequest
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -20,37 +24,49 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        var binding: ActivityRegister2Binding = ActivityRegister2Binding.inflate(layoutInflater)
+        var binding: ActivityRegisterBinding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btn.setOnClickListener {
-            val name = binding.name.text.toString().trim()
-            val mail = binding.mail.text.toString().trim()
-            val pass = binding.pass.text.toString().trim()
+        binding.btnRegister.setOnClickListener {
+            val name = binding.editTextName.text.toString().trim()
+            val mail = binding.editTextEmail.text.toString().trim()
+            val pass = binding.editTextPassword.text.toString().trim()
+            val rpass = binding.editTextRepeatPassword.text.toString().trim()
+            val msgError = binding.msgError
 
-            lifecycleScope.launch {
+            if (pass == rpass) {
 
-                try {
-                    val retrofit = Retrofit.Builder()
-                        .baseUrl(baseUrl)
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build()
-                    val api = retrofit.create(ApiService::class.java)
-                    val request = RegisterRequest(
-                        name = name,
-                        email = mail,
-                        password = pass
-                    )
+                lifecycleScope.launch {
 
-                    val response = api.loginUser(request)
-                    Log.d("Login", "Usuário cadastrado")
+                    try {
+                        val retrofit = Retrofit.Builder()
+                            .baseUrl(baseUrl)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build()
+                        val api = retrofit.create(ApiService::class.java)
+                        val request = RegisterRequest(
+                            name = name,
+                            email = mail,
+                            password = pass
+                        )
 
-                } catch (e: Exception) {
+                        val login = Intent(this@RegisterActivity, MainActivity::class.java)
+                        startActivity(login)
 
-                    //se der erro aqui e porque ele nao colocou mais de 6 digitos na senhe
-                    //ou o email ja esta cadastrado
-                    Log.e("LoginError", "Erro ao fazer login: ${e.message}")
+                    } catch (e: HttpException) {
+                        when (e.code()) {
+                            400 -> {
+                                msgError.text = "Email já cadastrado"
+                                msgError.visibility = View.VISIBLE
+                            }
+
+                            else -> Log.e("LoginError", "inesperado: ${e.code()}")
+                        }
+                    }
                 }
+            } else{
+                msgError.text="As senhas não coincidem"
+                msgError.visibility = View.VISIBLE
             }
         }
     }
