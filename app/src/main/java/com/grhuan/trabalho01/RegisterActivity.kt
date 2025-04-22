@@ -7,7 +7,6 @@ import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.grhuan.trabalho01.MainActivity
 import com.grhuan.trabalho01.api.ApiService
 import com.grhuan.trabalho01.databinding.ActivityRegisterBinding
 import com.grhuan.trabalho01.dto.RegisterRequest
