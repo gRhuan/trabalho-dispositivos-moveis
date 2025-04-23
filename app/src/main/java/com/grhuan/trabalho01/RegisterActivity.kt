@@ -49,6 +49,8 @@ class RegisterActivity : AppCompatActivity() {
                             password = pass
                         )
 
+                        api.registerUser(request)
+
                         val login = Intent(this@RegisterActivity, MainActivity::class.java)
                         startActivity(login)
 
